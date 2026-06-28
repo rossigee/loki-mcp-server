@@ -49,9 +49,9 @@ func main() {
 
 	if cfg.Transport == "http" {
 		addr := cfg.Host + ":" + cfg.Port
-		logger.Printf("Starting HTTP/SSE server on %s", addr)
-		sseSvr := server.NewSSEServer(s)
-		if err := http.ListenAndServe(addr, sseSvr); err != nil {
+		logger.Printf("Starting streamable HTTP server on %s", addr)
+		httpSvr := server.NewStreamableHTTPServer(s)
+		if err := http.ListenAndServe(addr, httpSvr); err != nil {
 			logger.Fatalf("server error: %v", err)
 		}
 	} else {
