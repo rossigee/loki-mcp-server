@@ -16,11 +16,17 @@ type Config struct {
 	TLSSkipVerify bool
 	TenantID      string
 	HTTPTimeout   time.Duration
+	Transport     string
+	Host          string
+	Port          string
 }
 
 func Load() (*Config, error) {
 	cfg := &Config{
 		HTTPTimeout: 30 * time.Second,
+		Transport:   "stdio",
+		Host:        "127.0.0.1",
+		Port:        "8000",
 	}
 
 	cfg.LokiURL = strings.TrimRight(os.Getenv("LOKI_URL"), "/")
@@ -56,6 +62,18 @@ func Load() (*Config, error) {
 			return nil, fmt.Errorf("LOKI_HTTP_TIMEOUT is not a valid duration: %w", err)
 		}
 		cfg.HTTPTimeout = d
+	}
+
+	if v := os.Getenv("TRANSPORT"); v != "" {
+		cfg.Transport = v
+	}
+
+	if v := os.Getenv("HOST"); v != "" {
+		cfg.Host = v
+	}
+
+	if v := os.Getenv("PORT"); v != "" {
+		cfg.Port = v
 	}
 
 	return cfg, nil
